@@ -2,51 +2,49 @@
 
 struct CycleListElement {
     int value;
-    CycleListElement* previous;
     CycleListElement* next;
 };
 
 struct CycleList {
-    CycleListElement* begin;
+    CycleListElement* head;
+    int size;
 };
 
 CycleList* createCycle()
 {
-    return new CycleList{nullptr};
+    return new CycleList{nullptr, 0};
 }
 
 void deleteCycle(CycleList* cycle)
 {
-    int length = lengthCycle(cycle);
-    while (length) {
-        pop(cycle->begin);
-        length--;
+    while (cycle->size) {
+        remove(cycle->head, cycle);
+        (cycle->size)--;
     }
     delete cycle;
 }
 
-void insertFirst(int value, CycleList* cycle)
+void addFirst(int value, CycleList* cycle)
 {
-    CycleListElement* newElement = new CycleListElement{value, newElement, newElement};
-    cycle->begin = newElement;
+    CycleListElement* newElement = new CycleListElement{value, newElement};
+    cycle->head = newElement;
+    cycle->size++;
 }
 
-void insert(int value, CycleListElement* prev)
+void insert(int value, CycleListElement* current, CycleList* cycle)
 {
-    CycleListElement* tempNext = prev->next;
-    CycleListElement* tempPrev = prev->next->previous;
-    CycleListElement* newElement = new CycleListElement{value, tempPrev, tempNext};
-    prev->next = newElement;
-    prev->next->previous = newElement;
+    CycleListElement* tempNext = current->next;
+    CycleListElement* newElement = new CycleListElement{value, tempNext};
+    current->next = newElement;
+    cycle->size++;
 }
 
-int pop(CycleListElement* current)
+void remove(CycleListElement* current, CycleList* cycle)
 {
-    int value = current->value;
-    current->previous->next = current->next;
-    current->next->previous = current->previous;
+    CycleListElement* previous = moveSeveralTimes(current, cycle->size - 1);
+    previous->next = current->next;
     delete current;
-    return value;
+    cycle->size--;
 }
 
 int getValue(CycleListElement* current)
@@ -59,26 +57,17 @@ CycleListElement* next(CycleListElement* current)
     return current->next;
 }
 
-CycleListElement* previous(CycleListElement* current)
+CycleListElement* moveSeveralTimes(CycleListElement* current, int step)
 {
-    return current->previous;
-}
-
-int lengthCycle(CycleList* cycle)
-{
-    CycleListElement* current = cycle->begin;
-    int length = 0;
-    if (current) {
-        length++;
-        while (current->next != cycle->begin) {
-            length++;
-            current = current->next;
-        }
+    CycleListElement* newCurrent = current;
+    for (int i = 0; i < step; ++i) {
+        newCurrent = next(newCurrent);
     }
-    return length;
+    return newCurrent;
 }
 
-CycleListElement* getFirst(CycleList* cycle)
+int getSize(CycleList* cycle)
 {
-    return cycle->begin;
+    return cycle->size;
 }
+
