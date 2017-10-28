@@ -17,6 +17,16 @@ int main()
         current = next(current);
     }
     printCycle(squad);
+    current = getFirst(squad);
+    cout << getValue(current) << endl;
+    int currentSize = getSize(squad);
+    while (currentSize > 1) {
+        remove(current, squad);
+        printCycle(squad);
+        currentSize--;
+        current = moveSeveralTimes(current, m);
+    }
+    printCycle(squad);
 
     return 0;
 }

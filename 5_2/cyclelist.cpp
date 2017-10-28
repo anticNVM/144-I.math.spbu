@@ -29,9 +29,10 @@ void deleteCycle(CycleList* cycle)
 
 void addFirst(int value, CycleList* cycle)
 {
-    CycleListElement* newElement = new CycleListElement{value, newElement};
+    CycleListElement* newElement = new CycleListElement{value, nullptr};
+    newElement->next = newElement;
     cycle->head = newElement;
-    cycle->size++;
+    (cycle->size)++;
 }
 
 void insert(int value, CycleListElement* current, CycleList* cycle)
@@ -39,7 +40,7 @@ void insert(int value, CycleListElement* current, CycleList* cycle)
     CycleListElement* tempNext = current->next;
     CycleListElement* newElement = new CycleListElement{value, tempNext};
     current->next = newElement;
-    cycle->size++;
+    (cycle->size)++;
 }
 
 void remove(CycleListElement* current, CycleList* cycle)
@@ -47,7 +48,7 @@ void remove(CycleListElement* current, CycleList* cycle)
     CycleListElement* previous = moveSeveralTimes(current, cycle->size - 1);
     previous->next = current->next;
     delete current;
-    cycle->size--;
+    (cycle->size)--;
 }
 
 int getValue(CycleListElement* current)

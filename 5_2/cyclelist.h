@@ -37,6 +37,7 @@ CycleListElement* getFirst(CycleList* cycle);
 // возвращает размер списка
 int getSize(CycleList* cycle);
 
+// выводит значения элементов списка в консоль через пробел
 void printCycle(CycleList* cycle);
 
 #endif // CYCLELIST
