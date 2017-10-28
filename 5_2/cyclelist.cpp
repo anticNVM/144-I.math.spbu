@@ -1,4 +1,7 @@
 #include "cyclelist.h"
+#include <iostream>
+
+using namespace std;
 
 struct CycleListElement {
     int value;
@@ -64,6 +67,21 @@ CycleListElement* moveSeveralTimes(CycleListElement* current, int step)
         newCurrent = next(newCurrent);
     }
     return newCurrent;
+}
+
+CycleListElement* getFirst(CycleList* cycle)
+{
+    return cycle->head;
+}
+
+void printCycle(CycleList *cycle)
+{
+    CycleListElement* current = cycle->head;
+    for (int i = 0; i < cycle->size; ++i) {
+        cout << current->value << ' ';
+        current = next(current);
+    }
+    cout << endl;
 }
 
 int getSize(CycleList* cycle)

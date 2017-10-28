@@ -25,11 +25,19 @@ void remove(CycleListElement* current, CycleList *cycle);
 // возвращает значение текущего элемента списка
 int getValue(CycleListElement* current);
 
+// возвращает указатель на элемент, следующий за текущим
+CycleListElement* next(CycleListElement* current);
+
 // возвращает указатель на элемент, следующий за текущим через step
 CycleListElement* moveSeveralTimes(CycleListElement* current, int step);
 
+// возвращает указатель на 1 элемент списка
+CycleListElement* getFirst(CycleList* cycle);
+
 // возвращает размер списка
 int getSize(CycleList* cycle);
+
+void printCycle(CycleList* cycle);
 
 #endif // CYCLELIST
 

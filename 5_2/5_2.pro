@@ -9,3 +9,6 @@ SOURCES += main.cpp \
 HEADERS += \
     cyclelist.h
 
+DISTFILES += \
+    task.txt
+
