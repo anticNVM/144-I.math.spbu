@@ -9,6 +9,7 @@ int main()
     int n = 0;
     int m = 0;
     cin >> n >> m;
+
     CycleList* squad = createCycle();
     addFirst(0, squad);
     CycleListElement* current = getFirst(squad);
@@ -16,16 +17,16 @@ int main()
         insert(i, current, squad);
         current = next(current);
     }
-    printCycle(squad);
+
     current = getFirst(squad);
-    cout << getValue(current) << endl;
     int currentSize = getSize(squad);
     while (currentSize > 1) {
-        remove(current, squad);
-        printCycle(squad);
-        currentSize--;
+        //printCycle(squad);
         current = moveSeveralTimes(current, m);
+        remove(current, squad);
+        currentSize--;
     }
+    cout << "The last warrior is ";
     printCycle(squad);
 
     return 0;
