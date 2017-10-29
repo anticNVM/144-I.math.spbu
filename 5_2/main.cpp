@@ -1,5 +1,5 @@
 #include <iostream>
-#include "cyclelist.h"
+#include "cycleList.h"
 
 using namespace std;
 
@@ -22,13 +22,16 @@ int main()
     int currentSize = getSize(squad);
     while (currentSize > 1) {
         //printCycle(squad);
-        current = moveSeveralTimes(current, m);
+        current = moveNext(current, m);
+        CycleListElement* prev = previous(current);
         remove(current, squad);
+        current = prev;
         currentSize--;
     }
     cout << "The last warrior is ";
     printCycle(squad);
 
+    deleteCycle(squad);
     return 0;
 }
 

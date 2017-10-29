@@ -16,7 +16,7 @@ void deleteCycle(CycleList* cycle);
 // добавляет первый элемент в список
 void addFirst(int value, CycleList* cycle);
 
-// вставляет новый элемент списка за текщим
+// вставляет новый элемент списка за текущим
 void insert(int value, CycleListElement* current, CycleList *cycle);
 
 // удаляет текущий элемент списка
@@ -28,8 +28,11 @@ int getValue(CycleListElement* current);
 // возвращает указатель на элемент, следующий за текущим
 CycleListElement* next(CycleListElement* current);
 
+// возвращает указатель на предыдущий элемент
+CycleListElement* previous(CycleListElement* current);
+
 // возвращает указатель на элемент, следующий за текущим через step
-CycleListElement* moveSeveralTimes(CycleListElement* current, int step);
+CycleListElement* moveNext(CycleListElement* current, int step);
 
 // возвращает указатель на 1 элемент списка
 CycleListElement* getFirst(CycleList* cycle);
