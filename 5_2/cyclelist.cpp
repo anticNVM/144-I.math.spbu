@@ -45,8 +45,12 @@ void insert(int value, CycleListElement* current, CycleList* cycle)
 
 void remove(CycleListElement* current, CycleList* cycle)
 {
+
     CycleListElement* previous = moveSeveralTimes(current, cycle->size - 1);
     previous->next = current->next;
+    if (cycle->head == current) {
+        cycle->head = current->next;
+    }
     delete current;
     (cycle->size)--;
 }
