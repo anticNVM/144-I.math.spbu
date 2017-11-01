@@ -31,13 +31,17 @@ int calculatePostfix(const string& expression)
             int digit = symbol - '0';
             push(digit, stack);
         } else if (symbol != ' '){
-            int right = pop(stack);
-            int left = pop(stack);
+            int right = 0;
+            pop(stack, right);
+            int left = 0;
+            pop(stack, left);
             int value = calculateBinary(left, right, symbol);
             push(value, stack);
         }
     }
-    int result = top(stack);
+    int result = 0;
+    top(stack, result);
+
     deleteStack(stack);
     return result;
 }
