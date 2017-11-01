@@ -3,9 +3,16 @@
 #include "../stack/stack.h"
 using namespace std;
 
+// возвращает значение выражения в постфиксной записи
 int calculatePostfix(const string& expression);
+
+// проверяет, является ли символ числом
 bool isDigit(char symbol);
+
+// возвращает результат бинарной операции (+-*/)
 int calculateBinary(int leftOperand, int rightOperand, char operation);
+
+// принимает строку из консоли и сохраняет ее в expression
 void inputExpression(string& expression);
 
 int main()
