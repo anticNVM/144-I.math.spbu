@@ -15,11 +15,13 @@ void deleteStack(Stack* stack);
 // добавляет элемент стек
 void push(TypeElement value, Stack* stack);
 
-// удаляет элемент с вершины и возвращает его значение
-TypeElement pop(Stack* stack);
+// удаляет элемент с вершины и сохраняет его значение в value
+// возвращает false, если элемент не найден, иначе true
+bool pop(Stack* stack, TypeElement& value);
 
-// возвращает значение верхнего элемента стека
-TypeElement top(Stack* stack);
+// сохраняет значение верхнего в value
+// возвращает false, если элемент не найден, иначе true
+bool top(Stack* stack, TypeElement& value);
 
 // проверяет стек на пустоту
 bool isEmpty(Stack* stack);
