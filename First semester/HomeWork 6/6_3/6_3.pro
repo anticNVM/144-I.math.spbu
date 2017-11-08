@@ -4,8 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    charStack.cpp
+    ../stackInt/stackInt.cpp
 
 HEADERS += \
-    charStack.h
+    ../stackInt/stackInt.h
 
+DISTFILES += \
+    testData.in.txt \
+    reference.txt
