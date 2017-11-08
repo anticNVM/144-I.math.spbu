@@ -1,7 +1,12 @@
 #include <iostream>
 #include <string>
-#include "../stack/stack.h"
+#include "../stackInt/stackInt.h"
 using namespace std;
+
+/**
+   Программа считает значение выражения в постфиксной записи
+   (все операнды - цифры)
+**/
 
 // возвращает значение выражения в постфиксной записи
 int calculatePostfix(const string& expression);
@@ -38,16 +43,13 @@ int calculatePostfix(const string& expression)
             int digit = symbol - '0';
             push(digit, stack);
         } else if (symbol != ' '){
-            int right = 0;
-            pop(stack, right);
-            int left = 0;
-            pop(stack, left);
+            int right = pop(stack);
+            int left = pop(stack);
             int value = calculateBinary(left, right, symbol);
             push(value, stack);
         }
     }
-    int result = 0;
-    top(stack, result);
+    int result = top(stack);
 
     deleteStack(stack);
     return result;

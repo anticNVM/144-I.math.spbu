@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "stackInt.h"
 
 struct StackElement {
     TypeElement value;
@@ -15,26 +15,37 @@ void push(TypeElement value, Stack* stack)
     stack->head = newElement;
 }
 
-bool pop(Stack* stack, TypeElement& value)
+TypeElement pop(Stack* stack, bool* isSuccessful)
 {
     if (stack->head != nullptr) {
-        value = stack->head->value;
+        TypeElement value = stack->head->value;
         StackElement* next = stack->head->next;
         delete stack->head;
         stack->head = next;
-        return true;;
+        if (isSuccessful) {
+            *isSuccessful = true;
+        }
+        return value;
     } else {
-        return false;
+        if (isSuccessful) {
+            *isSuccessful = false;
+        }
+        return {};
     }
 }
 
-bool top(Stack* stack, TypeElement& value)
+TypeElement top(Stack* stack, bool* isSuccessful)
 {
     if (stack->head != nullptr) {
-        value = stack->head->value;
-        return true;
+        if (isSuccessful) {
+            *isSuccessful = true;
+        }
+        return stack->head->value;
     } else {
-        return false;
+        if (isSuccessful) {
+            *isSuccessful = false;
+        }
+        return {};
     }
 }
 
@@ -51,8 +62,7 @@ Stack* createStack()
 void deleteStack(Stack* stack)
 {
     while (!isEmpty(stack)) {
-        TypeElement temp;
-        pop(stack, temp);
+        pop(stack);
     }
     delete stack;
 }

@@ -1,7 +1,11 @@
 #include <iostream>
-#include "../stack/stack.h"
+#include "../stackInt/stackInt.h"
 
 using namespace std;
+
+/**
+    Программа проверяет баланс скобок в строке
+**/
 
 // сохраняет введенную из консоли последовательность в brackets
 void inputSequence(string& brackets);
@@ -13,7 +17,7 @@ bool isOpeningBracket(char bracket);
 bool isPair(char opening, char close);
 
 // проверяет сбалансированность скобочной последовательности
-bool checkBrackets(string& brackets);
+bool checkBrackets(const string& brackets);
 
 int main()
 {
@@ -25,7 +29,7 @@ int main()
     return 0;
 }
 
-bool checkBrackets(string& brackets)
+bool checkBrackets(const string& brackets)
 {
     Stack* stack = createStack();
     bool isBalanced = true;
@@ -33,9 +37,10 @@ bool checkBrackets(string& brackets)
         if (isOpeningBracket(bracket)) {
             push(bracket, stack);
         } else {
-            TypeElement topBracket = '0';
-            if (top(stack, topBracket) && isPair(topBracket, bracket)) {
-                pop(stack, topBracket);
+            bool flag = true;
+            TypeElement topBracket = top(stack, &flag);
+            if (flag && isPair(topBracket, bracket)) {
+                pop(stack);
             } else {
                 isBalanced = false;
                 break;
