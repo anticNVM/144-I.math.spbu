@@ -4,7 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    stack.cpp \
+    ../stackInt/stackInt.cpp
 
 HEADERS += \
-    stack.h
+    ../stackInt/stackInt.h
+
