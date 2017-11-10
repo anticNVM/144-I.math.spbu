@@ -87,13 +87,12 @@ TypeElement getValue(SortedList* list, int index)
 
 int getIndex(TypeElement value, SortedList *list)
 {
-    moveTo(list, 0);
-    bool isExist = true;
-    while (getCurrent(list)->value != value) {
-        if (getCurrent(list)->next != nullptr) {
-            next(list);
-        } else {
-            isExist = false;
+    begin(list);
+    bool isExist = false;
+    while (getCurrent(list)->next != 0) {
+        next(list);
+        if (getCurrent(list)->value == value) {
+            isExist = true;
             break;
         }
     }
