@@ -4,8 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    cyclelist.cpp
+    cycleList.cpp
 
 HEADERS += \
-    cyclelist.h
+    cycleList.h
+
+DISTFILES += \
+    task.txt
 
