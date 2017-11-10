@@ -1,16 +1,24 @@
 #include <iostream>
+#include <fstream>
 #include "../stackInt/stackInt.h"
 
 using namespace std;
 
 string sortStation(const string& infix);
 bool isOperator(char token);
-int priorityOfOperator(char operat);
-
+int priorityOfOperator(char operation);
 
 int main()
 {
-    // add files part
+    ifstream fin("testData.in.txt");
+    ofstream fout("testData.out.txt");
+    string expression;
+    while (getline(fin, expression)) {
+        fout << sortStation(expression) << endl;
+    }
+    fin.close();
+    fout.close();
+
     return 0;
 }
 
@@ -19,19 +27,22 @@ string sortStation(const string& infix)
     string postfix = "";
     Stack* stack = createStack();
     for (auto token : infix) {
-        if (isdigit(token)) {
+        if (isdigit(token) || isalpha(token)) {
             postfix += token;
+            postfix += ' ';
         } else if (isOperator(token)) {
             while (!isEmpty(stack) &&
-                   priorityOfOperator(top(stack)) > priorityOfOperator(token)) {
+                   priorityOfOperator(token) <= priorityOfOperator(top(stack))) {
                 postfix += pop(stack);
+                postfix += ' ';
             }
             push(token, stack);
         } else if (token == '(') {
             push(token, stack);
         } else if (token == ')') {
             while (top(stack) != '(') {
-//                postfix += pop(stack);
+                postfix += pop(stack);
+                postfix += ' ';
             }
             pop(stack);
         } else {
@@ -40,6 +51,7 @@ string sortStation(const string& infix)
     }
     while (!isEmpty(stack)) {
         postfix += pop(stack);
+        postfix += ' ';
     }
     deleteStack(stack);
     return postfix;
@@ -47,12 +59,12 @@ string sortStation(const string& infix)
 
 bool isOperator(char token)
 {
-    return (token == '+' || token == '-'|| token == '*'|| token == '/');
+    return (token == '+' || token == '-' || token == '*' || token == '/');
 }
 
-int priorityOfOperator(char operat)
+int priorityOfOperator(char operation)
 {
-    switch (operat) {
+    switch (operation) {
     case '+':
         return 1;
     case '-':
@@ -65,3 +77,4 @@ int priorityOfOperator(char operat)
         return 0;
     }
 }
+
