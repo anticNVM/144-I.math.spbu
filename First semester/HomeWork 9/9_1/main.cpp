@@ -9,17 +9,16 @@ int main()
 {
     ifstream fin("text.in.txt");
     HashTable* myTable = createTable();
-    string word = "";
+    //cout << "kek" << endl;
     while (!fin.eof()) {
-        word = fin.get();
-        try {
+        string word = "";
+        fin >> word;
+        if (word != "") {
             add(word, myTable);
-        } catch (const string& msg) {
-
+            (*getValue(word, myTable))++;
         }
-        get(word, myTable)++;
     }
-    cout << get("Mutter", myTable) << endl;
+    cout << *getValue("mama", myTable) << endl;
     deleteTable(myTable);
     return 0;
 }

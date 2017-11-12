@@ -10,5 +10,5 @@ HEADERS += \
     hashTable.h
 
 DISTFILES += \
-    text.in.txt
+    ../../../../../Документы/programming/cpp_builds/9_1-Desktop_Qt_5_5_1_GCC_64bit-Debug/text.in.txt
 
