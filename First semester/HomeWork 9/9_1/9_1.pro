@@ -9,3 +9,6 @@ SOURCES += main.cpp \
 HEADERS += \
     hashTable.h
 
+DISTFILES += \
+    text.in.txt
+

@@ -5,7 +5,7 @@
 
 struct HashTable;
 
-HashTable* createTable();
+HashTable* createTable(int index = 1);
 
 void deleteTable(HashTable* table);
 
@@ -17,7 +17,7 @@ void remove(const std::string& key, HashTable* table);
 
 int getValue(const std::string& key, HashTable* table);
 
-std::vector<std::string>& keys(HashTable* table);
+void getKeys(HashTable* table, std::vector<std::string>& keys);
 
 bool isInTable(const std::string& key, HashTable* table);
 
