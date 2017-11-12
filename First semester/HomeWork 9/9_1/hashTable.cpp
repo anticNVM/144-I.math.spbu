@@ -77,7 +77,7 @@ void remove(const std::string& key, HashTable* table)
     }
 }
 
-int getValue(const std::string& key, HashTable* table)
+int& get(const std::string& key, HashTable* table)
 {
     if (!isInTable(key, table)) {
         throw "NotExist";
