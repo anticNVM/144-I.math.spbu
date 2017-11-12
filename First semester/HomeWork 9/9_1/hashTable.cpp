@@ -2,10 +2,11 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <assert.h>
 
 using namespace std;
 
-int INITIAL_SIZE = 64;
+const int INITIAL_SIZE = 64;
 
 struct HashTable {
     vector<pair<string, int>> array;
@@ -13,11 +14,12 @@ struct HashTable {
 };
 
 int myHash(const string& key);
+void resizeTable(HashTable* table);
 
-HashTable* createTable()
+HashTable* createTable(int index)
 {
-    HashTable* newTable = new HashTable;
-    newTable->array.resize(INITIAL_SIZE);
+    HashTable* newTable = new HashTable{};
+    newTable->array.resize(INITIAL_SIZE * index);
     return newTable;
 }
 
@@ -37,21 +39,82 @@ void clearTable(HashTable* table)
 
 void add(const std::string& key, HashTable* table, int value)
 {
-    auto h = myHash(key) % table->array.capacity();
-    while (table->array[h].first != key) {
-
+    auto h1 = myHash(key) % table->array.capacity();
+    auto h2 = myHash(key) % (table->array.capacity() - 1) + 1;
+    if (table->array[h1].first == key) {
+        throw "AlreadyExist";
+    } else {
+        for (unsigned i = 0; i < table->array.capacity(); ++i) {
+            if (table->array[h1].first == "") {
+                table->array[h1].first = key;
+                table->array[h1].second = value;
+                return;
+            } else {
+                h1 = (h1 + h2) % table->array.capacity();
+            }
+        }
+        if (table->fillFactor > 0.7) {
+            resizeTable(table);
+        }
     }
 }
 
-void remove(const std::string& key, HashTable* table);
+void remove(const std::string& key, HashTable* table)
+{
+    if (!isInTable(key, table)) {
+        throw "NotExist";
+    } else {
+        auto h1 = myHash(key) % table->array.capacity();
+        auto h2 = myHash(key) % (table->array.capacity() - 1) + 1;
+        for (unsigned i = 0; i < table->array.capacity(); ++i) {
+            if (table->array[h1].first == key) {
+                table->array[h1].first = "";
+                table->array[h1].second = -1;
+            } else {
+                h1 = (h1 + h2) % table->array.capacity();
+            }
+        }
+    }
+}
 
-int getValue(const std::string& key, HashTable* table);
+int getValue(const std::string& key, HashTable* table)
+{
+    if (!isInTable(key, table)) {
+        throw "NotExist";
+    } else {
+        auto h = myHash(key) % table->array.capacity();
+        return table->array[h].second;
+    }
+}
 
-std::vector<std::string>& keys(HashTable* table);
+void getKeys(HashTable* table, std::vector<std::string>& keys)
+{
+    for (auto basket : table->array) {
+        if (basket.first != "") {
+            keys.push_back(basket.first);
+        }
+    }
+}
 
-bool isInTable(const std::string& key, HashTable* table);
+bool isInTable(const std::string& key, HashTable* table)
+{
+    auto h1 = myHash(key) % table->array.capacity();
+    auto h2 = myHash(key) % (table->array.capacity() - 1) + 1;
+    for (unsigned i = 0; i < table->array.capacity(); ++i) {
+        if (table->array[h1].first == "" && table->array[h1].second == 0) {
+            return false;
+        } else if (table->array[h1].first == key) {
+            return true;
+        } else {
+            h1 = (h1 + h2) % table->array.capacity();
+        }
+    }
+}
 
-int getFactor(HashTable* table);
+int getFactor(HashTable* table)
+{
+    return table->fillFactor;
+}
 
 int myHash(const string& key)
 {
@@ -61,4 +124,17 @@ int myHash(const string& key)
         result = (result * p) + ch;
     }
     return result;
+}
+
+void resizeTable(HashTable* table)
+{
+    HashTable* newTable = createTable(table->array.capacity() / INITIAL_SIZE);
+    for (auto backet : table->array) {
+        if (backet.first != "") {
+            add(backet.first, newTable, backet.second);
+        }
+    }
+    HashTable* buffer = table;
+    table = newTable;
+    deleteTable(buffer);
 }
