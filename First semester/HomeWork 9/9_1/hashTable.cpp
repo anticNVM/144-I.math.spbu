@@ -14,7 +14,7 @@ struct HashTable {
 
 int hashFunc(const string& key);
 int doubleHashFunc(const string& key);
-void resizeTable(HashTable* table);
+void resizeTable(HashTable*& table);
 
 HashTable* createTable(int index)
 {
@@ -37,7 +37,7 @@ void clearTable(HashTable* table)
     table->array.resize(INITIAL_SIZE);
 }
 
-void add(const std::string& key, HashTable* table, int value)
+void add(const std::string& key, HashTable*& table, int value)
 {
     // add behavior for existed key
     auto firstHash = hashFunc(key) % table->array.capacity();
@@ -147,7 +147,7 @@ int doubleHashFunc(const string& key)
     return 2 * result + 1;
 }
 
-void resizeTable(HashTable* table)
+void resizeTable(HashTable*& table)
 {
     HashTable* newTable = createTable((table->array.capacity() / INITIAL_SIZE) + 1);
     vector<string> keys;
