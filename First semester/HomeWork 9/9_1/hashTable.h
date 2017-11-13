@@ -21,4 +21,4 @@ void getKeys(HashTable* table, std::vector<std::string>& keys);
 
 bool isInTable(const std::string& key, HashTable* table);
 
-int getFactor(HashTable* table);
+float getFactor(HashTable* table);
