@@ -17,7 +17,7 @@ int main()
         fin >> word;
         referenceStr(word);
         if (word != "") {
-            cout << "kek" << ' ';
+            cout << "log" << ' ';
             add(word, table);
             (*getValue(word, table))++;
         }

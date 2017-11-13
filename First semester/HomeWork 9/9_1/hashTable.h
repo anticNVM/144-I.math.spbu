@@ -11,7 +11,7 @@ void deleteTable(HashTable* table);
 
 void clearTable(HashTable* table);
 
-void add(const std::string& key, HashTable* table, int value = 0);
+void add(const std::string& key, HashTable*& table, int value = 0);
 
 void remove(const std::string& key, HashTable* table, const std::string& def = "Not Exist");
 
