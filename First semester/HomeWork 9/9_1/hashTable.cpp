@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,9 +13,15 @@ struct HashTable {
     vector<pair<string, int>> array;
 };
 
+// rolling hash with p = 7
 int hashFunc(const string& key);
+
+// rolling hash with p = 3, return odd
 int doubleHashFunc(const string& key);
+
+// increase size of table doubly
 void resizeTable(HashTable*& table);
+
 
 HashTable* createTable(int index)
 {
@@ -42,56 +49,50 @@ void add(const std::string& key, HashTable*& table, int value)
     // add behavior for existed key
     auto firstHash = hashFunc(key) % table->array.capacity();
     auto secondHash = doubleHashFunc(key) % table->array.capacity();
-    if (table->array[firstHash].first == key) {
-        //cout << "YetExist" << endl;
-        return;
-    } else {
-        for (unsigned i = 0; i < table->array.capacity(); ++i) {
-            if (table->array[firstHash].first == "") {
-                table->array[firstHash].first = key;
-                table->array[firstHash].second = value;
-                break;
-            } else {
-                firstHash = (firstHash + secondHash) % table->array.capacity();
-            }
+    for (unsigned i = 0; i < table->array.capacity(); ++i) {
+        if (table->array[firstHash].first == key) {
+            return;
+        } else if (table->array[firstHash].first == "") {
+            table->array[firstHash].first = key;
+            table->array[firstHash].second = value;
+            break;
+        } else {
+            firstHash = (firstHash + secondHash) % table->array.capacity();
         }
-        if (getFactor(table) > 0.7) {
-            resizeTable(table);
-        }
+    }
+    if (getFactor(table) > 0.7) {
+        resizeTable(table);
     }
 }
 
-void remove(const std::string& key, HashTable* table, const string& def)
+void remove(const std::string& key, HashTable* table)
 {
-    if (!isInTable(key, table)) {
-        cout << def << endl;
-        return;
-    } else {
-        auto firstHash = hashFunc(key) % table->array.capacity();
-        auto secondHash = doubleHashFunc(key) % table->array.capacity();
-        for (unsigned i = 0; i < table->array.capacity(); ++i) {
-            if (table->array[firstHash].first == key) {
-                table->array[firstHash].first = "";
-                table->array[firstHash].second = -1;
-                return;
-            } else {
-                firstHash = (firstHash + secondHash) % table->array.capacity();
-            }
-        }
-    }
-}
-
-int* getValue(const std::string& key, HashTable* table, const std::string& def)
-{
-    auto firsthash = hashFunc(key) % table->array.capacity();
+    // bevavior for existed key
+    auto firstHash = hashFunc(key) % table->array.capacity();
     auto secondHash = doubleHashFunc(key) % table->array.capacity();
     for (unsigned i = 0; i < table->array.capacity(); ++i) {
-        if (table->array[firsthash].first == "" && table->array[firsthash].second == 0) {
-            return nullptr;
-        } else if (table->array[firsthash].first == key) {
-            return &table->array[firsthash].second;
+        if (table->array[firstHash].first == key) {
+            table->array[firstHash].first = "";
+            table->array[firstHash].second = -1;
+            return;
         } else {
-            firsthash = (firsthash + secondHash) % table->array.capacity();
+            firstHash = (firstHash + secondHash) % table->array.capacity();
+        }
+    }
+}
+
+int* getValue(const std::string& key, HashTable* table)
+{
+    // bevavior for existed key
+    auto firstHash = hashFunc(key) % table->array.capacity();
+    auto secondHash = doubleHashFunc(key) % table->array.capacity();
+    for (unsigned i = 0; i < table->array.capacity(); ++i) {
+        if (table->array[firstHash].first == "" && table->array[firstHash].second == 0) {
+            return nullptr;
+        } else if (table->array[firstHash].first == key) {
+            return &table->array[firstHash].second;
+        } else {
+            firstHash = (firstHash + secondHash) % table->array.capacity();
         }
     }
 }
@@ -103,6 +104,7 @@ void getKeys(HashTable* table, std::vector<std::string>& keys)
             keys.push_back(basket.first);
         }
     }
+    sort(keys.begin(), keys.end());
 }
 
 bool isInTable(const std::string& key, HashTable* table)
@@ -144,12 +146,12 @@ int doubleHashFunc(const string& key)
     for (auto ch : key) {
         result = (result * p) + ch;
     }
-    return 2 * result + 1;
+    return (2 * result + 1);
 }
 
 void resizeTable(HashTable*& table)
 {
-    HashTable* newTable = createTable((table->array.capacity() / INITIAL_SIZE) + 1);
+    HashTable* newTable = createTable((table->array.capacity() / INITIAL_SIZE) * 2);
     vector<string> keys;
     getKeys(table, keys);
     for (auto key : keys) {
