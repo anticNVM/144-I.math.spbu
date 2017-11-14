@@ -1,35 +1,43 @@
+#include "hashTable.h"
 #include <iostream>
-#include <hashTable.h>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
+// now str consists only of letters
 void referenceStr(string& str);
 
 int main()
 {
     ifstream fin("text.in.txt");
-    HashTable* table = createTable();
-    while (!fin.eof()) {
-        string word = "";
-        fin >> word;
-        referenceStr(word);
-        if (word != "") {
-            cout << "log" << ' ';
-            add(word, table);
-            (*getValue(word, table))++;
+    if (fin.good()) {
+        HashTable* table = createTable();
+        while (!fin.eof()) {
+            string word = "";
+            fin >> word;
+            referenceStr(word);
+            if (word != "") {
+                // cout << "log" << ' ';
+                add(word, table);
+                (*getValue(word, table))++;
+            }
         }
+        vector<string> keys;
+        getKeys(table, keys);
+        cout << "  <Frequency of meeting words in text> \n";
+        for (auto key : keys) {
+            cout << setw(15) << key << setw(5) << (*getValue(key, table)) << endl;
+        }
+        cout << "\nLoad Factor of hash table is " << getFactor(table) << endl << endl;
+        deleteTable(table);
+    } else {
+        cout << "ERROR: File cannot be opened." << endl;
     }
     fin.close();
-    vector<string> keys;
-    getKeys(table, keys);
-    for (auto key : keys) {
-        cout << key << ' ' << (*getValue(key, table)) << endl;
-    }
-    cout << endl << getFactor(table) << endl;
-    deleteTable(table);
+
     return 0;
 }
 
