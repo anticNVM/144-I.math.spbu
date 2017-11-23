@@ -1,26 +1,42 @@
 #include "splayTree.h"
 #include <stack>
+#include <utility>
 
 using namespace std;
 
-struct Node {
+// Гензель(двоичнный) - ходит по двоичному дереву, запоминая путь
+struct Hansel;
+
+struct SplayNode {
     KeyType key;
     ValueType value;
-    Node* leftChild;
-    Node* rightChild;
-};
 
-// Гензель(двоичнный) - ходит по двоичному дереву, запоминая путь
-struct Hansel {
-    stack<Node*> pass;
-    Node* lastVisitedChild;
-};
+    SplayNode* leftChild;
+    SplayNode* rightChild;
 
-struct SplayTree {
-    Node* root;
     Hansel* hansel;
 };
 
+struct Hansel {
+    stack<SplayNode*> pass;
+    SplayNode* lastVisitedChild;
+};
+
+struct Map {
+    SplayNode* root;
+};
+
+// перемещает узел дерева с ключом key в корень
+void splay(SplayNode* root, const KeyType& key);
+
+// объединяет 2 дерева в 1
+SplayNode* merge(SplayNode* left, SplayNode* right);
+
+// возвращает указатель на элемент с ключом key
+// nullptr, усли такого элемента не существует
+SplayNode* findElement(const KeyType& key, SplayNode* root);
+
+void mapUpdate(Map* map, SplayNode* root);
 
 // перейти в левую ветку
 void moveLeft(Hansel* current);
@@ -38,83 +54,73 @@ void moveDown(Hansel* current);
 void moveToRoot(Hansel* hansel);
 
 
-// перемещает узел дерева с ключом key в корень
-void splay(SplayTree* tree, const KeyType& key);
-
-// объединяет 2 дерева в 1
-Node* merge(Node* left, Node* right);
-
-
-// возвращает указатель на элемент с ключом key
-// nullptr, усли такого элемента не существует
-Node* findElement(const KeyType &key, SplayTree *tree);
-
-
-void add(const KeyType& key, const ValueType& value, SplayTree* tree)
+void add(const KeyType& key, const ValueType& value, Map* map)
 {
-    Node* node = findElement(key, tree);
+    SplayNode* root = map->root;
+    SplayNode* node = findElement(key, root);
     if (node != nullptr) {
         node->value = value;
     } else {
-        moveUp(tree->hansel);
-        Node* parent = tree->hansel->pass.top();
-        Node* newNode = new Node{key, value, nullptr, nullptr};
+        moveUp(root->hansel);
+        SplayNode* parent = root->hansel->pass.top();
+        SplayNode* newNode = new SplayNode{key, value, nullptr, nullptr};
         if (key < parent->key) {
             parent->leftChild = newNode;
-            moveLeft(tree->hansel);
+            moveLeft(root->hansel);
         } else if (key > parent->key) {
             parent->rightChild = newNode;
-            moveRight(tree->hansel);
+            moveRight(root->hansel);
         }
     }
-    splay(tree, key);
-    moveToRoot(tree->hansel);
+    splay(root, key);
+    moveToRoot(root->hansel);
 }
 
-const ValueType& get(const KeyType& key, SplayTree* tree)
+const ValueType& get(const KeyType& key, Map* map)
 {
-    Node* node = findElement(key, tree);
+    SplayNode* root = map->root;
+    SplayNode* node = findElement(key, root);
     if (node == nullptr) {
         return "";
     } else {
-        splay(tree, key);
+        splay(root, key);
         return node->value;
     }
 }
 
-bool isExist(const KeyType& key, SplayTree* tree)
+bool isExist(const KeyType& key, Map* map)
 {
-    Node* node = findElement(key, tree);
-    if (node != nullptr) {
-        splay(tree, key);
-        return true;
-    } else {
-        return false;
-    }
+    SplayNode* root = map->root;
+    SplayNode* node = findElement(key, root);
+    if (node != nullptr)
+        splay(root, key);
+
+    return (node != nullptr);
 }
 
-void deleteKey(const KeyType& key, SplayTree* tree)
+void deleteKey(const KeyType& key, Map* map)
 {
-    Node* node = findElement(key, tree);
+    SplayNode* root = map->root;
+    SplayNode* node = findElement(key, root);
     if (node == nullptr)
         return;
 
-    splay(tree, key);
-    Node* newRoot = merge(node->leftChild, node->rightChild);
-    delete tree->root;
-    tree->root = newRoot;
+    splay(root, key);
+    SplayNode* newRoot = merge(node->leftChild, node->rightChild);
+    delete root;
+    mapUpdate(map, newRoot);
 }
 
-Node* findElement(const KeyType& key, SplayTree* tree)
+SplayNode* findElement(const KeyType& key, SplayNode* root)
 {
-    Node* current = tree->root;
+    SplayNode* current = root;
     while (current != nullptr) {
         if (key < current->key) {
             current = current->leftChild;
-            moveLeft(tree->hansel);
+            moveLeft(root->hansel);
         } else if (key > current->key) {
             current = current->rightChild;
-            moveRight(tree->hansel);
+            moveRight(root->hansel);
         } else {
             return current;
         }
@@ -122,8 +128,7 @@ Node* findElement(const KeyType& key, SplayTree* tree)
     return nullptr;
 }
 
-
-const KeyType& maxElement(Node* node)
+const KeyType& maxKey(SplayNode* node)
 {
     if (node == nullptr)
         return "";
@@ -134,23 +139,26 @@ const KeyType& maxElement(Node* node)
     return node->key;
 }
 
-Node* merge(Node* left, Node* right)
+SplayNode* merge(SplayNode* left, SplayNode* right)
 {
-    KeyType max = maxElement(left);
-    if (max == "") {
+    KeyType mKey = maxKey(left);
+    if (mKey == "")
         return right;
-    }
+
+    splay(left, mKey);
+    left->rightChild = right;
+    return left;
 }
 
 void moveLeft(Hansel *current)
 {
-    Node* top = current->pass.top();
+    SplayNode* top = current->pass.top();
     current->pass.push(top->leftChild);
 }
 
 void moveRight(Hansel *current)
 {
-    Node* top = current->pass.top();
+    SplayNode* top = current->pass.top();
     current->pass.push(top->rightChild);
 }
 
@@ -164,4 +172,12 @@ void moveDown(Hansel *current)
 {
     current->pass.push(current->lastVisitedChild);
     current->lastVisitedChild = nullptr;
+}
+
+void moveToRoot(Hansel* hansel)
+{
+    hansel->lastVisitedChild = nullptr;
+    while (!hansel->pass.empty()) {
+        hansel->pass.pop();
+    }
 }
