@@ -38,20 +38,22 @@ SplayNode* findElement(const KeyType& key, SplayNode* root);
 
 void mapUpdate(Map* map, SplayNode* root);
 
+void initHansel(SplayNode* root);
+
 // перейти в левую ветку
-void moveLeft(Hansel* current);
+void moveLeft(SplayNode* root);
 
 // перейти в правую ветку
-void moveRight(Hansel* current);
+void moveRight(SplayNode* root);
 
 // перейти к родителю текущей ветки
-void moveUp(Hansel* current);
+void moveUp(SplayNode* root);
 
 // перейти к тому потомку, от котрого пришел к родителю командой moveUp
-void moveDown(Hansel* current);
+void moveDown(SplayNode* root);
 
 // перемещает Гензель в корень поддерева
-void moveToRoot(Hansel* hansel);
+void moveToRoot(SplayNode* root);
 
 
 void add(const KeyType& key, const ValueType& value, Map* map)
@@ -61,19 +63,19 @@ void add(const KeyType& key, const ValueType& value, Map* map)
     if (node != nullptr) {
         node->value = value;
     } else {
-        moveUp(root->hansel);
+        moveUp(root);
         SplayNode* parent = root->hansel->pass.top();
         SplayNode* newNode = new SplayNode{key, value, nullptr, nullptr};
         if (key < parent->key) {
             parent->leftChild = newNode;
-            moveLeft(root->hansel);
+            moveLeft(root);
         } else if (key > parent->key) {
             parent->rightChild = newNode;
-            moveRight(root->hansel);
+            moveRight(root);
         }
     }
     splay(root, key);
-    moveToRoot(root->hansel);
+    moveToRoot(root);
 }
 
 const ValueType& get(const KeyType& key, Map* map)
@@ -113,14 +115,15 @@ void deleteKey(const KeyType& key, Map* map)
 
 SplayNode* findElement(const KeyType& key, SplayNode* root)
 {
+    initHansel(root);
     SplayNode* current = root;
     while (current != nullptr) {
         if (key < current->key) {
             current = current->leftChild;
-            moveLeft(root->hansel);
+            moveLeft(root);
         } else if (key > current->key) {
             current = current->rightChild;
-            moveRight(root->hansel);
+            moveRight(root);
         } else {
             return current;
         }
@@ -150,34 +153,50 @@ SplayNode* merge(SplayNode* left, SplayNode* right)
     return left;
 }
 
-void moveLeft(Hansel *current)
+void initHansel(SplayNode* root)
 {
+    root->hansel->pass.push(root);
+}
+
+void moveLeft(SplayNode* root)
+{
+    Hansel* current = root->hansel;
     SplayNode* top = current->pass.top();
     current->pass.push(top->leftChild);
 }
 
-void moveRight(Hansel *current)
+void moveRight(SplayNode* root)
 {
+    Hansel* current = root->hansel;
     SplayNode* top = current->pass.top();
     current->pass.push(top->rightChild);
 }
 
-void moveUp(Hansel *current)
+void moveUp(SplayNode* root)
 {
+    Hansel* current = root->hansel;
     current->lastVisitedChild = current->pass.top();
     current->pass.pop();
 }
 
-void moveDown(Hansel *current)
+void moveDown(SplayNode* root)
 {
+    Hansel* current = root->hansel;
     current->pass.push(current->lastVisitedChild);
     current->lastVisitedChild = nullptr;
 }
 
-void moveToRoot(Hansel* hansel)
+void moveToRoot(SplayNode* root)
 {
-    hansel->lastVisitedChild = nullptr;
-    while (!hansel->pass.empty()) {
-        hansel->pass.pop();
+    Hansel* current = root->hansel;
+    current->lastVisitedChild = nullptr;
+    while (!current->pass.empty()) {
+        current->pass.pop();
     }
 }
+
+void mapUpdate(Map *map, SplayNode *root)
+{
+    map->root = root;
+}
+
