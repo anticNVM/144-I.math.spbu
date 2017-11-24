@@ -44,7 +44,6 @@ int main()
     fin.close();
     deleteList(list);
 
-    cout << "kek" << endl;
     return 0;
 }
 
