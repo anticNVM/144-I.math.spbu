@@ -20,6 +20,7 @@ int main()
     pop(list);
 
     reverse(list);
+    cout << "Reversed list:\n";
     printList(list);
 
     deleteList(list);

@@ -14,7 +14,7 @@ List* createList();
 void clearList(List* list);
 
 // удаляет список
-void deleteList(List*& list);
+void deleteList(List* list);
 
 // добавляет элемент в список по индексу
 // (по умолчанию в конец списка)

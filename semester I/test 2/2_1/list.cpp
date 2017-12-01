@@ -153,12 +153,13 @@ void clearList(List *list)
     }
 }
 
-void deleteList(List*& list)
+void deleteList(List* list)
 {
     begin(list);
     while (getCurrent(list)->next != nullptr) {
         pop(list, 0);
     }
     delete list->sentinel;
+    delete list->iter;
     delete list;
 }
