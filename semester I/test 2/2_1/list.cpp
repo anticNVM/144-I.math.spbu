@@ -49,10 +49,12 @@ void moveTo(List* list, int index)
     }
 }
 
-void push(TypeElement value, List* list, int index)
+void add(TypeElement value, List* list, int index)
 {
     if (index == -1) {
         index = list->size - 1;
+    } else {
+        index--;
     }
     moveTo(list, index);
     ListElement* newElement = new ListElement{value, getCurrent(list)->next};
@@ -60,7 +62,7 @@ void push(TypeElement value, List* list, int index)
     (list->size)++;
 }
 
-int remove(List* list, int index)
+int pop(List* list, int index)
 {
     if (index == -1) {
         index = list->size - 1;
@@ -111,6 +113,21 @@ bool isEmpty(List *list)
     return (list->sentinel->next == nullptr);
 }
 
+void reverse(List*& list)
+{
+    if (list == nullptr)
+        return;
+
+    List* reversedList = createList();
+    begin(list);
+    while (getCurrent(list)->next != nullptr) {
+        next(list);
+        add(getCurrent(list)->value, reversedList, 0);
+    }
+    deleteList(list);
+    list = reversedList;
+}
+
 void printList(List *list)
 {
     begin(list);
@@ -132,15 +149,15 @@ void clearList(List *list)
 {
     begin(list);
     while (getCurrent(list)->next != nullptr) {
-        remove(list, 0);
+        pop(list, 0);
     }
 }
 
-void deleteList(List *list)
+void deleteList(List*& list)
 {
     begin(list);
     while (getCurrent(list)->next != nullptr) {
-        remove(list, 0);
+        pop(list, 0);
     }
     delete list->sentinel;
     delete list;

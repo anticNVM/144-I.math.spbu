@@ -4,8 +4,6 @@
 
 using namespace std;
 
-void reverseList(List* list);
-
 int main()
 {
     ifstream fin("input.txt");
@@ -19,16 +17,14 @@ int main()
         fin >> num;
         add(num, list);
     }
-    remove(list);
-    reverseList(list);
+    pop(list);
+
+    reverse(list);
     printList(list);
 
     deleteList(list);
     fin.close();
+
     return 0;
 }
 
-void reverseList(List *list)
-{
-
-}
