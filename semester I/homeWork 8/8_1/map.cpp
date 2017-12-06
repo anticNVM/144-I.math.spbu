@@ -1,5 +1,6 @@
 #include "map.h"
 #include <string>
+#include <assert.h>
 
 using namespace std;
 
@@ -112,4 +113,69 @@ SplayNode* findNode(SplayNode* tree, const string& key)
         }
     }
     return nullptr;
+}
+
+void rotate(SplayNode* node) {
+    SplayNode* parent = node->parent;
+    SplayNode* gparent = parent->parent;
+    assert(parent != nullptr);
+    if (node->key < parent->key) {
+        parent->leftChild = node->rightChild;
+        node->rightChild = parent;
+    } else {
+        parent->rightChild = node->leftChild;
+        node->leftChild = parent;
+    }
+    if (gparent == nullptr)
+        return;
+    if (node->key < gparent->key) {
+        gparent->leftChild = node;
+    } else {
+        gparent->rightChild = node;
+    }
+}
+
+// теперь node - корень
+void zig(SplayNode* node)
+{
+    rotate(node);
+}
+
+void zigZig(SplayNode* node)
+{
+    rotate(node->parent);
+    rotate(node);
+}
+
+void zigZag(SplayNode* node)
+{
+    rotate(node);
+    rotate(node);
+}
+
+void splay(SplayNode *tree, SplayNode *node)
+{
+    SplayNode* parent = node->parent;
+    if (parent == nullptr) {
+        return;
+    }
+    SplayNode* gparent = parent->parent;
+    if (gparent == nullptr) {
+        zig(node);
+        return;
+    }
+    if (node->key < parent->key) {
+        if (parent->key < gparent->key) {
+            zigZig(node);
+        } else {
+            zigZag(node);
+        }
+    } else {
+        if (parent->key > gparent->key) {
+            zigZig(node);
+        } else {
+            zigZag(node);
+        }
+    }
+    splay(tree, node);
 }
