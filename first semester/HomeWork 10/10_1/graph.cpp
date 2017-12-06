@@ -41,8 +41,8 @@ Graph* parseFile(const string& filename)
     int edgesAmount = values[0];
     int peaksAmount = values[1];
 
-    graph->peaks.resize(peaksAmount + 1);
-    graph->distance = new int[][peaksAmount];
+    graph->peaks.resize(peaksAmount);
+    graph->distance = new int*[peaksAmount];
     for (int i = 0; i < peaksAmount; ++i) {
         graph->distance[i] = new int[peaksAmount];
     }
