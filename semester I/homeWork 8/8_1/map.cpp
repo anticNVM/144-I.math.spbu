@@ -1,4 +1,5 @@
 #include "map.h"
+#include <iostream>
 #include <string>
 #include <assert.h>
 
@@ -45,6 +46,7 @@ void add(Map* map, const string& key, const string& value)
             if (current->leftChild == nullptr) {
                 newNode->parent = current;
                 current->leftChild = newNode;
+                current = current->leftChild;
                 flag = false;
             } else {
                 current = current->leftChild;
@@ -53,6 +55,7 @@ void add(Map* map, const string& key, const string& value)
             if (current->rightChild == nullptr) {
                 newNode->parent = current;
                 current->rightChild = newNode;
+                current = current->rightChild;
                 flag = false;
             } else {
                 current = current->rightChild;
@@ -178,4 +181,9 @@ void splay(SplayNode *tree, SplayNode *node)
         }
     }
     splay(tree, node);
+}
+
+void printRoot(Map* map)
+{
+    cout << map->root->key << endl;
 }

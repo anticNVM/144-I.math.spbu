@@ -16,3 +16,5 @@ void remove(Map* map, const string& key);
 Map* createMap();
 
 void deleteMap(Map* map);
+
+void printRoot(Map* map);

@@ -11,7 +11,9 @@ int main()
     add(map, "test", "kek");
     cout << getValue(map, "test") << endl;
     cout << isExists(map, "cow") << endl;
-
+    printRoot(map);
+    add(map, "123", "23");
+    printRoot(map);
 
     return 0;
 }
