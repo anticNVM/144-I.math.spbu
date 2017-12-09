@@ -13,14 +13,11 @@ void displayWelcome();
 // выводит меню и возвращает значение пользовательского ввода
 char menuChoice();
 
-// возвращает указатель на открытый файл или nullptr, если файл не удалось открыть
-FILE* fopenImproved(char* fileName, const char* spec);
-
 // выгружает данные из файла в PhoneBook без удаления информации в файле
-void unload(FILE* file, PhoneBook* book);
+bool unload(PhoneBook* book, const std::__cxx11::string& filename);
 
 // загружает данные из PhoneBook в файл (с удалением предыдущей информации)
-void load(PhoneBook* notes, FILE* file);
+bool upload(PhoneBook* notes, const std::__cxx11::string& filename);
 
 // создает телефонный справочник
 PhoneBook* createBook();
@@ -32,7 +29,7 @@ PhoneNotation* createNotation();
 // возвращает 0, если запись успешно добавлена, -1 иначе
 int addNotation(PhoneNotation* note, PhoneBook* book);
 
-// печатает в консоль запись <id) name number>
+// печатает в консоль запись <name number>
 void printNotation(PhoneNotation* note);
 
 // печатает в консоль все записи PhoneBook

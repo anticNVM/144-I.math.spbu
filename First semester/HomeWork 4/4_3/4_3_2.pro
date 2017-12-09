@@ -9,3 +9,6 @@ SOURCES += main.cpp \
 HEADERS += \
     sources.h
 
+DISTFILES += \
+    telephoneDirectory.txt
+
