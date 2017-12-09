@@ -18,3 +18,5 @@ Map* createMap();
 void deleteMap(Map* map);
 
 void printRoot(Map* map);
+
+void printTree(Map* map);

@@ -1,6 +1,7 @@
 #include "map.h"
 #include <iostream>
 #include <string>
+#include <queue>
 #include <assert.h>
 
 using namespace std;
@@ -100,7 +101,25 @@ void remove(Map* map, const string& key)
     if (node == nullptr)
         return;
     splay(map->root, node);
-    // TODO
+    if (node->leftChild == nullptr && node->rightChild == nullptr) {
+        map->root = nullptr;
+    } else if (node->leftChild == nullptr) {
+        map->root = node->rightChild;
+        node->rightChild = nullptr;
+    } else if (node->rightChild == nullptr) {
+        map->root = node->leftChild;
+        node->leftChild = nullptr;
+    } else {
+        SplayNode* maxInLeft = node->leftChild;
+        while (maxInLeft->rightChild != nullptr) {
+            maxInLeft = maxInLeft->rightChild;
+        }
+        splay(node->leftChild, maxInLeft);
+        maxInLeft->rightChild = node->leftChild;
+        map->root = maxInLeft;
+        maxInLeft->parent = nullptr;
+    }
+    delete node;
 }
 
 SplayNode* findNode(SplayNode* tree, const string& key)
@@ -122,20 +141,31 @@ void rotate(SplayNode* node) {
     SplayNode* parent = node->parent;
     SplayNode* gparent = parent->parent;
     assert(parent != nullptr);
+
     if (node->key < parent->key) {
+        if (node->rightChild) {
+            node->rightChild->parent = parent;
+        }
         parent->leftChild = node->rightChild;
         node->rightChild = parent;
     } else {
+        if (node->leftChild) {
+            node->leftChild->parent = parent;
+        }
         parent->rightChild = node->leftChild;
         node->leftChild = parent;
     }
+    parent->parent = node;
+
     if (gparent == nullptr)
+        node->parent = nullptr;
         return;
     if (node->key < gparent->key) {
         gparent->leftChild = node;
     } else {
         gparent->rightChild = node;
     }
+    node->parent = gparent;
 }
 
 // теперь node - корень
@@ -159,11 +189,11 @@ void zigZag(SplayNode* node)
 void splay(SplayNode *tree, SplayNode *node)
 {
     SplayNode* parent = node->parent;
-    if (parent == nullptr) {
+    if (parent == tree->parent) {
         return;
     }
     SplayNode* gparent = parent->parent;
-    if (gparent == nullptr) {
+    if (gparent == tree->parent) {
         zig(node);
         return;
     }
@@ -185,5 +215,25 @@ void splay(SplayNode *tree, SplayNode *node)
 
 void printRoot(Map* map)
 {
-    cout << map->root->key << endl;
+    (map->root) ? (cout << map->root->key << endl) : (cout << "NULL" << endl);
+}
+
+void printTree(Map* map)
+{
+    queue<SplayNode*> que;
+    que.push(map->root);
+    while (que.size() > 0) {
+        SplayNode* current = que.front();
+        que.pop();
+        if (current == nullptr)
+            continue;
+
+        cout << "(";
+        (current->leftChild) ? (cout << current->leftChild->key) : (cout << "NULL");
+        cout << " " << current->key << " ";
+        (current->rightChild) ? (cout << current->rightChild->key) : (cout << "NULL");
+        cout << ")" << endl;
+        que.push(current->leftChild);
+        que.push(current->rightChild);
+    }
 }
