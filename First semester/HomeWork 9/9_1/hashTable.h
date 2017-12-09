@@ -27,7 +27,7 @@ void remove(const std::string& key, HashTable* table);
 int* getValue(const std::string& key, HashTable* table);
 
 // add all keys from table to vector keys
-void getKeys(HashTable* table, std::vector<std::string>& keys);
+std::vector<std::string> getKeys(HashTable* table);
 
 // return true if key in table, else return false
 bool isInTable(const std::string& key, HashTable* table);
