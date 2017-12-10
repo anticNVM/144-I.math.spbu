@@ -1,13 +1,13 @@
 #include "graph.h"
-#include <list>
 #include <vector>
 #include <string>
 #include <fstream>
+#include <climits>
 
 using namespace std;
 
 struct Graph {
-    list<vector<int>> peaks;
+    vector<vector<int>> peaks;
     int** distance = nullptr;
     vector<int> capitals;
 };
@@ -70,14 +70,38 @@ Graph* parseFile(const string& filename)
 
 void deleteGraph(Graph* graph)
 {
-    for (int i = 0; i < (graph->peaks.size() - 1); ++i) {
+    for (unsigned i = 0; i < (graph->peaks.size() - 1); ++i) {
         delete[] graph->distance[i];
     }
     delete[] graph->distance;
     delete graph;
 }
 
-void print(Graph* graph)
-{
+int defineNearest(Graph* graph, int peak) {
+    int minDistance = INT_MAX;
+    int nearest = 0;
+    for (int i : graph->peaks[peak]) {
+        if (graph->distance[peak][i] < minDistance && graph->distance[peak][i] != 0) {
+            minDistance = graph->distance[peak][i];
+            nearest = i;
+        }
+    }
+    return nearest;
+}
 
+vector<vector<int>> countryAllocation(Graph* graph)
+{
+//    vector<vector<int>> allocation = graph->peaks;
+    vector<bool> used;
+    for (auto elem : graph->capitals) {
+        used.push_back(elem);
+    }
+    int i = 0;
+    while (used.size() != graph->peaks.size()) {
+        int currentCapital = graph->capitals[i];
+        int nearestPeak = defineNearest(graph, currentCapital);
+        for (int i : graph->peaks[nearestPeak]) {
+            graph->peaks[currentCapital].push_back(i);
+        }
+    }
 }
