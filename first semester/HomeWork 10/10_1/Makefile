@@ -49,9 +49,9 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		graph.cpp 
+		allocation.cpp 
 OBJECTS       = main.o \
-		graph.o
+		allocation.o
 DIST          = input.txt \
 		/home/guardian/Qt/5.5/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/guardian/Qt/5.5/gcc_64/mkspecs/common/unix.conf \
@@ -182,8 +182,8 @@ DIST          = input.txt \
 		/home/guardian/Qt/5.5/gcc_64/mkspecs/features/exceptions.prf \
 		/home/guardian/Qt/5.5/gcc_64/mkspecs/features/yacc.prf \
 		/home/guardian/Qt/5.5/gcc_64/mkspecs/features/lex.prf \
-		10_1.pro graph.h main.cpp \
-		graph.cpp
+		10_1.pro allocation.h main.cpp \
+		allocation.cpp
 QMAKE_TARGET  = 10_1
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = 10_1
@@ -515,11 +515,11 @@ compiler_clean:
 
 ####### Compile
 
-main.o: main.cpp graph.h
+main.o: main.cpp allocation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-graph.o: graph.cpp graph.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o graph.o graph.cpp
+allocation.o: allocation.cpp allocation.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o allocation.o allocation.cpp
 
 ####### Install
 

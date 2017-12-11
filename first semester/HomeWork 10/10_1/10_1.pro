@@ -4,11 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    graph.cpp
+    allocation.cpp
 
 DISTFILES += \
     input.txt
 
 HEADERS += \
-    graph.h
+    allocation.h
 
