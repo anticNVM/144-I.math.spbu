@@ -3,6 +3,9 @@
 #include <limits>
 #include <set>
 #include <utility>
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,10 +23,12 @@ vector<int> parseString(const string& str)
             temp.clear();
         }
     }
+    values.push_back(atoi(temp.c_str()));
+    temp.clear();
     return values;
 }
 
-bool parseFile(const string& filename, vector<vector<int> >& graph, vector<int>& capitals)
+bool parseFile(const string& filename, vector<vector<int>>& graph, vector<int>& capitals)
 {
     ifstream fin(filename);
     if (!fin.is_open()) {
@@ -33,8 +38,8 @@ bool parseFile(const string& filename, vector<vector<int> >& graph, vector<int>&
     string buffer = "";
     getline(fin, buffer);
     vector<int> values = parseString(buffer);
-    int edges = values[0];
-    int vertexes = values[1];
+    int vertexes = values[0];
+    int edges = values[1];
 
     graph.resize(vertexes);
     for (int i = 0; i < vertexes; ++i) {
@@ -62,22 +67,7 @@ bool parseFile(const string& filename, vector<vector<int> >& graph, vector<int>&
     return true;
 }
 
-// to лямбда
-pair<int, int> nearestVertex(const vector<vector<int> >& graph, const int from)
-{
-    int minDist = INF;
-    int to = 0;
-    for (unsigned i = 0; i < graph.size(); ++i) {
-        if (graph[from][i] < minDist) {
-            minDist = graph[from][i];
-            to = i;
-        }
-    }
-
-    return pair<int, int> (to, minDist);
-}
-
-vector<vector<int>> countryAllocation(const vector<vector<int> >& graph, const vector<int>& capitals)
+vector<vector<int>> countryAllocation(const vector<vector<int>>& graph, const vector<int>& capitals)
 {
     set<int> noVisited;
     for (unsigned i = 0; i < graph.size(); ++i) {
@@ -91,21 +81,49 @@ vector<vector<int>> countryAllocation(const vector<vector<int> >& graph, const v
         allocation[i].push_back(capitals[i]);
     }
 
-    int i = 0;
-    int minDistance = INF;
-    int nearestCity = 0;
-    // добавить проверку на связность
+    int currentCountry = 0;
+    // граф несвязный -> бесконечный цикл :(
     while (!noVisited.empty()) {
-        //int currentCapital = capitals[i];
-        for (auto city : allocation[i]) {
-            auto vertex = nearestVertex(graph, city);
-            if (vertex.second < minDistance) {
-                nearestCity = vertex.first;
+        int minDistance = INF;
+        int nearestCity = 0;
+        for (auto city : allocation[currentCountry]) {
+            for (unsigned i = 0; i < graph.size(); ++i) {
+                if (graph[city][i] < minDistance && noVisited.count(i) == 1) {
+                    minDistance = graph[city][i];
+                    nearestCity = i;
+                }
             }
         }
-        allocation[i].push_back(nearestCity);
-        noVisited.insert(nearestCity);
-        i = (i + 1) % capitals.size();
+        if (minDistance != INF) {
+            allocation[currentCountry].push_back(nearestCity);
+            noVisited.erase(nearestCity);
+        }
+        currentCountry = (currentCountry + 1) % capitals.size();
     }
     return allocation;
+}
+
+void printGraph(const vector<vector<int>>& graph)
+{
+    for (unsigned i = 0; i < graph.size(); ++i) {
+        cout << "|";
+        for (unsigned j = 0; j < graph.size(); ++j) {
+            cout << setw(3);
+            (graph[i][j] != INF) ? (cout << graph[i][j]) : (cout << "-");
+            cout << " |";
+        }
+        cout << endl;
+    }
+}
+
+void printAllocation(vector<vector<int>> allocation)
+{
+    for (auto country : allocation) {
+        cout << "Capital #" << country[0] << " -- cities: ";
+        for_each (country.begin() + 1, country.end(), [](int city) {
+           cout << city << " ";
+        });
+        cout << endl;
+    }
+    cout << endl;
 }
