@@ -6,7 +6,7 @@ int status(char ch);
 bool stateMachine(const char* str)
 {
     int stateTable[6][6] = {
-      /* let d_  '.' '@' _%+ else   */
+      /* let d-  '.' '@' _%+ else   */
         { 1,  1,  1, -1,  1, -1},   // start
         { 1,  1,  1,  2,  1, -1},   // read right symbol before '@'
         { 3,  3, -1, -1, -1, -1},   // read '@'
