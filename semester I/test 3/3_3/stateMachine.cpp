@@ -12,7 +12,7 @@ bool stateMachine(const char* str)
         { 3,  3, -1, -1, -1, -1},   // read '@'
         { 3,  3,  4, -1, -1, -1},   // read right symbol after '@'
         { 5,  3, -1, -1, -1, -1},   // read '.'
-        { 3,  3,  4, -1, -1, -1}    //
+        { 3,  3,  4, -1, -1, -1}    // ended with letter
     };
     int state = 0;
     int i = 0;
