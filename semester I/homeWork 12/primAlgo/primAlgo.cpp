@@ -6,15 +6,30 @@ struct Graph {
     int size = 0;
 
     Graph(const int amountOfVertexes);
+    Graph(const Graph& obj);
     ~Graph();
 };
 
 Graph::Graph(const int amountOfVertexes)
 {
     size = amountOfVertexes;
-    adjacencyMatrix = new int*[size];
+    adjacencyMatrix = new int*[size]{};
     for (int i = 0; i < size; ++i) {
         adjacencyMatrix[i] = new int[size]{};
+    }
+}
+
+Graph::Graph(const Graph &obj)
+{
+    size = obj.size;
+    adjacencyMatrix = new int*[size]{};
+    for (int i = 0; i < size; ++i) {
+        adjacencyMatrix[i] = new int[size]{};
+    }
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            adjacencyMatrix[i][j] = obj.adjacencyMatrix[i][j];
+        }
     }
 }
 
@@ -42,6 +57,11 @@ Graph* parseFile(const char filename[])
     }
     fclose(file);
     return graph;
+}
+
+Graph* copy(Graph* graph)
+{
+    return new Graph(*graph);
 }
 
 void deleteGraph(Graph* graph)
