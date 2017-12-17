@@ -1,5 +1,9 @@
 #include "primAlgo.h"
 #include <stdio.h>
+#include <limits.h>
+#include <assert.h>
+
+const int INF = INT_MAX;
 
 struct Graph {
     int** adjacencyMatrix = nullptr;
@@ -53,15 +57,13 @@ Graph* parseFile(const char filename[])
     for (int i = 0; i < graph->size; ++i) {
         for (int j = 0; j < graph->size; ++j) {
             fscanf(file, "%d", &graph->adjacencyMatrix[i][j]);
+            if (graph->adjacencyMatrix[i][j] == 0) {
+                graph->adjacencyMatrix[i][j] = INF;
+            }
         }
     }
     fclose(file);
     return graph;
-}
-
-Graph* copy(Graph* graph)
-{
-    return new Graph(*graph);
 }
 
 void deleteGraph(Graph* graph)
@@ -69,12 +71,72 @@ void deleteGraph(Graph* graph)
     graph->~Graph();
 }
 
+Graph* copy(Graph* graph)
+{
+    return new Graph(*graph);
+}
+
 void printGraph(Graph* graph)
 {
     for (int i = 0; i < graph->size; ++i) {
         for (int j = 0; j < graph->size; ++j) {
-            printf("%d ", graph->adjacencyMatrix[i][j]);
+            if (graph->adjacencyMatrix[i][j] == INF) {
+                printf("- ");
+            } else {
+                printf("%d ", graph->adjacencyMatrix[i][j]);
+            }
         }
         printf("\n");
     }
+}
+
+bool isAllVisited(const bool array[], const int size)
+{
+    for (int i = 0; i < size; ++i) {
+        if (!array[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int** primAlgorithm(Graph* graph)
+{
+    Graph* adjMatrixOfVisited = copy(graph);
+    int** minCoveringTree = new int*[graph->size - 1]{};
+    for (int i = 0; i < graph->size - 1; ++i) {
+        minCoveringTree[i] = new int[2];
+    }
+    int currentEdge = 0;
+    bool visitedVertexes[graph->size]{};
+    visitedVertexes[0] = true;
+    for (int i = 0; i < graph->size; ++i) {
+        adjMatrixOfVisited->adjacencyMatrix[i][0] = INF;
+    }
+    int nearestVertex = 0;
+    int minDistance = INF;
+    int parent = 0;
+    while (!isAllVisited(visitedVertexes, graph->size)) {
+        for (int i = 0; i < graph->size; ++i) {
+            if (visitedVertexes[i]) {
+                for (int j = 0; j < graph->size; ++j) {
+                    if (adjMatrixOfVisited->adjacencyMatrix[i][j] < minDistance) {
+                        minDistance = adjMatrixOfVisited->adjacencyMatrix[i][j];
+                        nearestVertex = j;
+                        parent = i;
+                    }
+                }
+            }
+        }
+        assert(minDistance != INF);
+        minCoveringTree[currentEdge][0] = parent;
+        minCoveringTree[currentEdge][1] = nearestVertex;
+        currentEdge++;
+        visitedVertexes[nearestVertex] = true;
+        for (int i = 0; i < graph->size; ++i) {
+            adjMatrixOfVisited->adjacencyMatrix[i][nearestVertex] = INF;
+        }
+        minDistance = INF;
+    }
+    return minCoveringTree;
 }
