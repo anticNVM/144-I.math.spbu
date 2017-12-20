@@ -5,16 +5,17 @@ using namespace std;
 
 int main()
 {
-    char filename[] = "input.txt";
+    const char filename[] = "input.txt";
     FILE* file = fopen(filename, "r");
     if (file == nullptr) {
         printf("ERROR: \"%s\" cannot be opened\n", filename);
         return 1;
     }
-    printf("Comments in \"%s\"\n", filename);
+    printf("Comments in \"%s\": \n\n", filename);
     stateMachine(file);
-    fclose(file);
+    printf("\n");
 
+    fclose(file);
     return 0;
 }
 

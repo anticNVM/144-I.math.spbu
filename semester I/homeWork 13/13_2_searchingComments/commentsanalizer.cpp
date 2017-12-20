@@ -8,9 +8,9 @@ void stateMachine(FILE* file)
     int stateTable[4][3] = {
      /* 's' '/' '*'     */
         {0,  1,  0},    // read symbols, not a comment
-        {0,  1,  2},    // read '/' (means begin of comment, if next symbol is '*'
+        {0,  1,  2},    // read '/' (means begin of comment, if next symbol is '*')
         {2,  2,  3},    //`read comment
-        {2,  0,  3}     // read '*' (means end of comment, if next symbol is '/'
+        {2,  0,  3}     // read '*' (means end of comment, if next symbol is '/')
     };
 
     int currentState = 0;
