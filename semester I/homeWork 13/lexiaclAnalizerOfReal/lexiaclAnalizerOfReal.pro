@@ -9,3 +9,6 @@ SOURCES += main.cpp \
 HEADERS += \
     lexicalanalizer.h
 
+DISTFILES += \
+    input.txt
+

@@ -27,7 +27,7 @@ bool stateMachine(char* str)
     {
         switch (state) {
         case Status::start:
-            if (isDigit(str[i]) && str[i] != '0') {
+            if (isDigit(str[i]) && str[i]) {
                 state = Status::itIsInteger;
             } else {
                 state = Status::fail;
