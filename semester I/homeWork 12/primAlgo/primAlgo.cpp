@@ -79,15 +79,21 @@ Graph* copy(Graph* graph)
 void printGraph(Graph* graph)
 {
     for (int i = 0; i < graph->size; ++i) {
+        printf("|");
         for (int j = 0; j < graph->size; ++j) {
             if (graph->adjacencyMatrix[i][j] == INF) {
-                printf("- ");
+                printf("%3s |", "-");
             } else {
-                printf("%d ", graph->adjacencyMatrix[i][j]);
+                printf("%3d |", graph->adjacencyMatrix[i][j]);
             }
         }
         printf("\n");
     }
+}
+
+int getAmountOfVertexes(Graph* graph)
+{
+    return graph->size;
 }
 
 bool isAllVisited(const bool array[], const int size)
