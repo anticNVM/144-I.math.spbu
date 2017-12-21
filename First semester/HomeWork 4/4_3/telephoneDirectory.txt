@@ -1,2 +1,4 @@
-vasya   123
-masha   135
+               vasya        123
+               masha        246
+                mama        456
+                 str        999
