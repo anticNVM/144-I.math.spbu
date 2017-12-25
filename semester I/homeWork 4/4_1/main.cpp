@@ -1,9 +1,10 @@
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
 // рязрядность 2х представления
-const int CAPACITY = 31;
+const int CAPACITY = 32;
 
 // возвращает булевое представление number
 bool* representation(int number);
@@ -29,6 +30,13 @@ int main()
     outputRepr(b, reprB);
     bool* sum = sumOfRepresentations(reprA, reprB);
     outputRepr(a + b, sum);
+    int sumR = 0;
+    for (int i = CAPACITY - 1; i >= 0; --i) {
+        if (sum[i]) {
+            sumR += pow(2, CAPACITY - i - 1);
+        }
+    }
+    cout << sumR << endl;
 
     delete[] reprB;
     delete[] reprA;
@@ -40,11 +48,11 @@ int main()
 bool* representation(int number)
 {
     bool* repr = new bool[CAPACITY]{};
-    //
-    int bit = 0x40000000;
+    int bit = 0x80000000;
     for (int i = 0; i < CAPACITY; ++i) {
         repr[i] = (number & bit);
         bit = bit >> 1;
+        bit = bit & 0x7FFFFFFF;
     }
     return repr;
 }
