@@ -26,9 +26,23 @@ Map* createMap()
     return new Map{};
 }
 
+void deleteRecursively(SplayNode* node)
+{
+    if (node->leftChild) {
+        deleteRecursively(node->leftChild);
+    }
+    if (node->rightChild) {
+        deleteRecursively(node->rightChild);
+    }
+    delete node;
+}
+
 void deleteMap(Map* map)
 {
-    // TODO
+    if (map->root) {
+        deleteRecursively(map->root);
+    }
+    delete map;
 }
 
 void add(Map* map, const string& key, const string& value)
@@ -232,8 +246,33 @@ void printTree(Map* map)
         (current->leftChild) ? (cout << current->leftChild->key) : (cout << "NULL");
         cout << " " << current->key << " ";
         (current->rightChild) ? (cout << current->rightChild->key) : (cout << "NULL");
-        cout << ")" << endl;
+        cout << ") : ";
+        cout << (current->parent ? current->parent->key : "NULL") << endl;
         que.push(current->leftChild);
         que.push(current->rightChild);
     }
 }
+
+//void printRecursively(SplayNode* node, int n)
+//{
+//    if (node->leftChild) {
+//        printRecursively(node->leftChild, n + 1);
+//    }
+//    for (int i = 0; i < n; ++i) {
+//        cout << " ";
+//    }
+//    cout << node->key << endl;
+//    if (node->rightChild) {
+//        printRecursively(node->rightChild, n + 1);
+//    }
+//}
+
+//void print(Map* map)
+//{
+//    if (map->root == nullptr) {
+//        cout << "kek" << endl;
+//        return;
+//    }
+//    printRecursively(map->root, 0);
+//    cout << endl;
+//}

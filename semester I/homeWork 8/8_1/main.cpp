@@ -52,7 +52,7 @@ int main()
         }
     }
 
-
+    deleteMap(map);
     return 0;
 }
 
