@@ -1,7 +1,6 @@
 #include "sources.h"
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <iomanip>
 #include <fstream>
 
@@ -55,7 +54,9 @@ bool addNotation(PhoneBook* book)
     // мб добвить проверку на уникальность
     if (book->index < book->maxSize) {
         PhoneNotation* note = createNotation();
-        book->notations[book->index] = note;
+        book->notations[book->index]->name = note->name;
+        book->notations[book->index]->number = note->number;
+        delete note;
         (book->index)++;
         return true;
     } else {
@@ -99,7 +100,7 @@ string findByName(const std::string& name, PhoneBook* book)
     return "";
 }
 
-bool unload(PhoneBook* book, const string& filename)
+bool load(PhoneBook* book, const string& filename)
 {
     ifstream fin(filename);
     if (!fin.is_open()) {
@@ -130,15 +131,15 @@ bool unload(PhoneBook* book, const string& filename)
 
 bool upload(PhoneBook* notes, const string& filename)
 {
-    FILE* file = fopen(filename.c_str(), "w");
-    if (file == nullptr) {
+    ofstream fout(filename);
+    if (!fout.is_open()) {
         return false;
     }
     for (int i = 0; i < notes->index; ++i) {
-        fprintf(file, "%20s ", notes->notations[i]->name.c_str());
-        fprintf(file, "%10s\n", notes->notations[i]->number.c_str());
+        fout << setw(20) << notes->notations[i]->name.c_str();
+        fout << setw(10) << notes->notations[i]->number.c_str() << endl;
     }
-    fclose(file);
+    fout.close();
     return true;
 }
 

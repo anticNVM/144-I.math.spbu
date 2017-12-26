@@ -24,7 +24,7 @@ void displayWelcome();
 void mainLoop(PhoneBook* book, const std::string& filename);
 
 // выгружает данные из файла в PhoneBook без удаления информации в файле
-bool unload(PhoneBook* book, const std::__cxx11::string& filename);
+bool load(PhoneBook* book, const std::__cxx11::string& filename);
 
 // загружает данные из PhoneBook в файл (с удалением предыдущей информации)
 bool upload(PhoneBook* notes, const std::__cxx11::string& filename);
