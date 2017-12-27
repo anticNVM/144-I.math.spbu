@@ -1,5 +1,6 @@
 #include <iostream>
 #include "map.h"
+#include <fstream>
 
 using namespace std;
 
@@ -7,6 +8,7 @@ void printMenu();
 
 int main()
 {
+    //ifstream cin("input.txt");
     Map* map = createMap();
     char choice = 0;
     while (choice != '0') {

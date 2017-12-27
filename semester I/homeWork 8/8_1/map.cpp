@@ -153,8 +153,8 @@ SplayNode* findNode(SplayNode* tree, const string& key)
 
 void rotate(SplayNode* node) {
     SplayNode* parent = node->parent;
-    SplayNode* gparent = parent->parent;
     assert(parent != nullptr);
+    SplayNode* gparent = parent->parent;
 
     if (node->key < parent->key) {
         if (node->rightChild) {
@@ -171,9 +171,10 @@ void rotate(SplayNode* node) {
     }
     parent->parent = node;
 
-    if (gparent == nullptr)
+    if (gparent == nullptr) {
         node->parent = nullptr;
         return;
+    }
     if (node->key < gparent->key) {
         gparent->leftChild = node;
     } else {
@@ -202,6 +203,7 @@ void zigZag(SplayNode* node)
 
 void splay(SplayNode *tree, SplayNode *node)
 {
+    SplayNode* treeParent = tree->parent;
     SplayNode* parent = node->parent;
     if (parent == tree->parent) {
         return;
@@ -223,6 +225,9 @@ void splay(SplayNode *tree, SplayNode *node)
         } else {
             zigZag(node);
         }
+    }
+    if (treeParent != tree->parent) {
+        tree = node;
     }
     splay(tree, node);
 }

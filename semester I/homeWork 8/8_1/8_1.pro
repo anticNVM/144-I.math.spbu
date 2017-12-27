@@ -9,3 +9,5 @@ SOURCES += main.cpp \
 HEADERS += \
     map.h
 
+DISTFILES +=
+
