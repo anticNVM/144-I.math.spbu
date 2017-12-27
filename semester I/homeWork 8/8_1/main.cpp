@@ -1,6 +1,5 @@
 #include <iostream>
 #include "map.h"
-#include <fstream>
 
 using namespace std;
 
@@ -8,8 +7,8 @@ void printMenu();
 
 int main()
 {
-    //ifstream cin("input.txt");
     Map* map = createMap();
+    cout << "INTERACTIVE MOD FOR WORKING WITH ASSOCIATIVE ARRAY \n\n";
     char choice = 0;
     while (choice != '0') {
         printMenu();
@@ -24,32 +23,39 @@ int main()
             cout << "Enter value: ";
             cin >> value;
             add(map, key, value);
+            cout << "\n\'" << key << "\' is successfully added to dictionary \n\n";
             break;
         case '2':
             cout << "Enter key: ";
             cin >> key;
-            cout << getValue(map, key) << endl;
+            cout << endl << getValue(map, key) << endl << endl;
             break;
         case '3':
             cout << "Enter key: ";
             cin >> key;
-            cout << isExists(map, key) << endl;
+            cout << "\n\'" << key << "\' is "
+                 << (isExists(map, key) ? "exists " : "not exists ") << endl << endl;
             break;
         case '4':
             cout << "Enter key: ";
             cin >> key;
             remove(map, key);
+            cout << "\n\'" << key << "\' is successfully deleted from dictionary \n\n";
             break;
         case '5':
+            cout << endl;
             printTree(map);
+            cout << endl;
             break;
         case '6':
+            cout << endl;
             printRoot(map);
+            cout << endl;
             break;
         case '0':
             break;
         default:
-            cout << "Wrong input( \n";
+            cout << "Wrong input( Please, try again \n\n";
             break;
         }
     }

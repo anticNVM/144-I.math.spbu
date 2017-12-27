@@ -129,7 +129,8 @@ void remove(Map* map, const string& key)
             maxInLeft = maxInLeft->rightChild;
         }
         splay(node->leftChild, maxInLeft);
-        maxInLeft->rightChild = node->leftChild;
+        maxInLeft->rightChild = node->rightChild;
+        node->rightChild->parent = maxInLeft;
         map->root = maxInLeft;
         maxInLeft->parent = nullptr;
     }
@@ -257,27 +258,3 @@ void printTree(Map* map)
         que.push(current->rightChild);
     }
 }
-
-//void printRecursively(SplayNode* node, int n)
-//{
-//    if (node->leftChild) {
-//        printRecursively(node->leftChild, n + 1);
-//    }
-//    for (int i = 0; i < n; ++i) {
-//        cout << " ";
-//    }
-//    cout << node->key << endl;
-//    if (node->rightChild) {
-//        printRecursively(node->rightChild, n + 1);
-//    }
-//}
-
-//void print(Map* map)
-//{
-//    if (map->root == nullptr) {
-//        cout << "kek" << endl;
-//        return;
-//    }
-//    printRecursively(map->root, 0);
-//    cout << endl;
-//}
