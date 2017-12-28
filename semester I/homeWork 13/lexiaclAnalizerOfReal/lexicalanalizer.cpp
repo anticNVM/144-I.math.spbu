@@ -53,7 +53,7 @@ bool stateMachine(char* str)
             break;
         case Status::itIsReal:
             if (isDigit(str[i])) {
-                state = Status::itIsInteger;
+                state = Status::itIsReal;
             } else if (isExponent(str[i])) {
                 state = Status::exponent;
             } else {
