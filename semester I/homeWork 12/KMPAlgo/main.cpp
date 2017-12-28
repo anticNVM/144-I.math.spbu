@@ -5,6 +5,10 @@
 
 using namespace std;
 
+void printIndexes(int* matchedIndexes, char* needle);
+char* readHaystack(FILE* file);
+char* readNeedle();
+
 int main()
 {
     const char filename[] = "input.txt";
@@ -14,12 +18,31 @@ int main()
         return 1;
     }
 
-    char* haystack = (char*)malloc(sizeof(char));
-    char* needle = (char*)malloc(sizeof(char));
+    char* haystack = readHaystack(file);
+    printf("TEXT FOR SEARCHING IN: \n%s \n", haystack);
+
+    char* needle = readNeedle();
+    fclose(file);
+
+    // array of endings of matched substrings
+    int* matchedIndexes = KMP(haystack, needle);
+
+    // print indexes of matched substrs
+    printf("\nMATCHES FOR PATTERN: \n\n");
+    printIndexes(matchedIndexes, needle);
+
+    free(matchedIndexes);
+    free(haystack);
+    free(needle);
+
+    return 0;
+}
+
+char* readHaystack(FILE* file)
+{
     char buffer = 0;
     int index = 0;
-
-    // read haystack from file
+    char* haystack = (char*)malloc(sizeof(char));
     buffer = getc(file);
     while (buffer != EOF) {
         haystack[index] = buffer;
@@ -28,12 +51,14 @@ int main()
         buffer = getc(file);
     }
     haystack[index] = '\0';
-    fclose(file);
-    printf("TEXT FOR SEARCHING IN: \n%s \n", haystack);
+    return haystack;
+}
 
-    // read needle from stdin
-    buffer = 0;
-    index = 0;
+char* readNeedle()
+{
+    char buffer = 0;
+    int index = 0;
+    char* needle = (char*)malloc(sizeof(char));
     printf("Please, enter pattern to search : \n");
     buffer = getchar();
     while (buffer != '\n') {
@@ -43,12 +68,11 @@ int main()
         buffer = getchar();
     }
     needle[index] = '\0';
+    return needle;
+}
 
-    // array of endings of matched substrings
-    int* matchedIndexes = KMP(haystack, needle);
-
-    // print indexes of matched substrs
-    printf("\nMATCHES FOR PATTERN: \n\n");
+void printIndexes(int* matchedIndexes, char* needle)
+{
     int i = 0;
     if (matchedIndexes[i] == 0) {
         printf("no matches \n");
@@ -61,11 +85,4 @@ int main()
         printf("\n");
     }
     printf("\n");
-
-    free(matchedIndexes);
-    free(haystack);
-    free(needle);
-
-    return 0;
 }
-
