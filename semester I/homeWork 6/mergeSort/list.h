@@ -1,7 +1,8 @@
 #pragma once
+#include <string>
 
 // тип значения, добавляемого в список
-typedef int TypeElement;
+typedef std::string TypeElement;
 
 // список
 struct List;
@@ -43,3 +44,13 @@ void reverse(List*& list);
 
 // печатает в консоль все значения списка через пробел
 void printList(List* list);
+
+void begin(List* list);
+
+void next(List* list);
+
+TypeElement getCurrentValue(List* list);
+
+bool isEnd(List* list);
+
+void moveTo(List* list, int index = 0);

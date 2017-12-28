@@ -1,4 +1,3 @@
-
 #include "list.h"
 #include <iostream>
 #include <assert.h>
@@ -86,7 +85,7 @@ TypeElement getValue(List* list, int index)
         moveTo(list, index);
         return getCurrent(list)->value;
     } else {
-        return -1;
+        return "";
     }
 }
 
@@ -141,7 +140,7 @@ void printList(List *list)
 
 List* createList()
 {
-    ListElement* sent = new ListElement{-1, nullptr};
+    ListElement* sent = new ListElement{"", nullptr};
     Iterator* iter = new Iterator{sent, -1};
     return new List{sent, iter, 0};
 }
@@ -163,4 +162,14 @@ void deleteList(List* list)
     delete list->sentinel;
     delete list->iter;
     delete list;
+}
+
+bool isEnd(List* list)
+{
+    return (getCurrent(list)->next == nullptr);
+}
+
+TypeElement getCurrentValue(List* list)
+{
+    return getCurrent(list)->value;
 }

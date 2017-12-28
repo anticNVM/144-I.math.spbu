@@ -4,8 +4,13 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
+    mergesort.cpp \
     list.cpp
 
 HEADERS += \
+    mergesort.h \
     list.h
+
+DISTFILES += \
+    input.txt
 
