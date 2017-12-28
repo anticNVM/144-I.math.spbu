@@ -28,7 +28,7 @@ void mergeSort(List*& list)
     }
     mergeSort(leftList);
     mergeSort(rightList);
-    clearList(list);
+    deleteList(list);
     list = merge(leftList, rightList);
 }
 

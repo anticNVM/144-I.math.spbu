@@ -12,12 +12,12 @@ char selectSorting();
 int main()
 {
     ifstream fin("input.txt");
-    map <string, string> dict = {};
-    List* list = createList();
+    map<string, string> dict{};
     if (!fin.is_open()) {
         cout << "ERROR: file cannot be opened. \n";
         return 1;
     }
+    List* list = createList();
     char choice = selectSorting();
     while (!fin.eof()) {
         string name = "";
@@ -67,4 +67,3 @@ char selectSorting()
     }
     return choice;
 }
-
