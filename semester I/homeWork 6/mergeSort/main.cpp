@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <iomanip>
 #include "mergesort.h"
 #include "list.h"
 
@@ -14,6 +15,7 @@ int main()
     map <string, string> dict = {};
     List* list = createList();
     if (!fin.is_open()) {
+        cout << "ERROR: file cannot be opened. \n";
         return 1;
     }
     char choice = selectSorting();
@@ -35,11 +37,20 @@ int main()
             add(key,list);
         }
     }
-    //int size = getSize(list);
-    mergeSort(list);
-    printList(list);
-    deleteList(list);
     fin.close();
+    mergeSort(list);
+
+    moveTo(list);
+    int size = getSize(list);
+    for (int i = 0; i < size; ++i) {
+        cout << setw(15) << getCurrentValue(list) << " - "
+             << setw(15) << dict.at(getCurrentValue(list)) << endl;
+        if (!isEnd(list)) {
+            next(list);
+        }
+    }
+
+    deleteList(list);
     return 0;
 }
 
@@ -57,6 +68,3 @@ char selectSorting()
     return choice;
 }
 
-//    for (auto it = dict.begin(); it != dict.end(); ++it) {
-//        cout << it->first << it->second << endl;
-//    }

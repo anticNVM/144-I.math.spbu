@@ -5,7 +5,6 @@ using namespace std;
 
 List* merge(List* listA, List* listB);
 
-// beg ??
 void mergeSort(List*& list)
 {
     moveTo(list);
@@ -33,6 +32,18 @@ void mergeSort(List*& list)
     list = merge(leftList, rightList);
 }
 
+void mergeTail(List* merged, List* list)
+{
+    while (true) {
+        add(getCurrentValue(list), merged);
+        if (isEnd(list)) {
+            break;
+        } else {
+            next(list);
+        }
+    }
+}
+
 List* merge(List *listA, List *listB)
 {
     List* merged = createList();
@@ -42,14 +53,7 @@ List* merge(List *listA, List *listB)
         if (getCurrentValue(listA) <= getCurrentValue(listB)) {
             add(getCurrentValue(listA), merged);
             if (isEnd(listA)) {
-                while (true) {
-                    add(getCurrentValue(listB), merged);
-                    if (isEnd(listB)) {
-                        break;
-                    } else {
-                        next(listB);
-                    }
-                }
+                mergeTail(merged, listB);
                 break;
             } else {
                 next(listA);
@@ -57,14 +61,7 @@ List* merge(List *listA, List *listB)
         } else {
             add(getCurrentValue(listB), merged);
             if (isEnd(listB)) {
-                while (true) {
-                    add(getCurrentValue(listA), merged);
-                    if (isEnd(listA)) {
-                        break;
-                    } else {
-                        next(listA);
-                    }
-                }
+                mergeTail(merged, listA);
                 break;
             } else {
                 next(listB);
