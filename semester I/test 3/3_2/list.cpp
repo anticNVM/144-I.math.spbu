@@ -16,6 +16,7 @@ struct Iterator {
 
 struct List {
     ListElement* sentinel;
+    ListElement* end;
     Iterator* iter;
     int size;
 };
@@ -39,7 +40,7 @@ void begin(List* list)
     list->iter->index = -1;
 }
 
-void moveTo(List* list, int index)
+void moveIterToPosition(List* list, int index)
 {
     if (index < list->iter->index) {
         begin(list);
@@ -51,14 +52,16 @@ void moveTo(List* list, int index)
 
 void add(TypeElement value, List* list, int index)
 {
+    ListElement* newElement = new ListElement{value, nullptr};
     if (index == -1) {
-        index = list->size - 1;
+        list->end->next = newElement;
+        list->end = newElement;
     } else {
         index--;
+        moveIterToPosition(list, index);
+        newElement->next = getCurrent(list)->next;
+        getCurrent(list)->next = newElement;
     }
-    moveTo(list, index);
-    ListElement* newElement = new ListElement{value, getCurrent(list)->next};
-    getCurrent(list)->next = newElement;
     (list->size)++;
 }
 
@@ -66,11 +69,13 @@ int pop(List* list, int index)
 {
     if (index == -1) {
         index = list->size - 1;
-    }
-    if (index < list->size && index >= 0) {
-        moveTo(list, index - 1);
+    } else if (index < list->size && index >= 0) {
+        moveIterToPosition(list, index - 1);
         ListElement* buffer = getCurrent(list)->next;
         getCurrent(list)->next = buffer->next;
+        if (list->end == buffer) {
+            list->end = getCurrent(list);
+        }
         delete buffer;
         (list->size)--;
         return 0;
@@ -82,7 +87,7 @@ int pop(List* list, int index)
 TypeElement getValue(List* list, int index)
 {
     if (index < list->size && index >= 0) {
-        moveTo(list, index);
+        moveIterToPosition(list, index);
         return getCurrent(list)->value;
     } else {
         return "";
@@ -142,7 +147,7 @@ List* createList()
 {
     ListElement* sent = new ListElement{"", nullptr};
     Iterator* iter = new Iterator{sent, -1};
-    return new List{sent, iter, 0};
+    return new List{sent, sent, iter, 0};
 }
 
 void clearList(List *list)
@@ -174,17 +179,16 @@ bool isInList(List* list, const TypeElement& str)
     if (getSize(list) == 0) {
         return false;
     }
-    moveTo(list);
-    while (true) {
+    moveIterToPosition(list, 0);
+    do {
         if (getCurrent(list)->value == str) {
             return true;
         }
         if (!isEnd(list)) {
             next(list);
-        } else {
-            break;
         }
-    }
+    } while (!isEnd(list));
+
     return false;
 }
 
@@ -194,16 +198,15 @@ List* getUnique(List* list)
     if (list->size == 0) {
         return unique;
     }
-    moveTo(list);
-    while (true) {
+    moveIterToPosition(list, 0);
+    do {
         if (!isInList(unique, getCurrent(list)->value)) {
             add(getCurrent(list)->value, unique);
         }
         if (!isEnd(list)) {
             next(list);
-        } else {
-            break;
         }
-    }
+    } while (!isEnd(list));
+
     return unique;
 }

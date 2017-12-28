@@ -45,12 +45,13 @@ void reverse(List*& list);
 // печатает в консоль все значения списка через пробел
 void printList(List* list);
 
-
 // перемещает итератор list по индексу
-void moveTo(List* list, int index = 0);
+void moveIterToPosition(List* list, int index);
 
 // проверяет наличие элемента в list за O(n)
 bool isInList(List* list, const TypeElement& str);
 
 // возвращает список, составленный из уникальных элементов
 List* getUnique(List* list);
+
+bool isEnd(List* list);
