@@ -1,0 +1,8 @@
+abba
+str
+norma
+str
+test
+abba
+123
+123
