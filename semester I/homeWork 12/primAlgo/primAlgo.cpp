@@ -144,5 +144,6 @@ int** primAlgorithm(Graph* graph)
         }
         minDistance = INF;
     }
+    deleteGraph(adjMatrixOfVisited);
     return minCoveringTree;
 }
