@@ -7,3 +7,4 @@
 asd ? //*//22 44 //*    8 crt**//
 /*/* qw* yu***/
 str / * la *//* comment in the end of file)
+/*hh*/*gh*/
