@@ -30,13 +30,13 @@ int main()
     outputRepr(b, reprB);
     bool* sum = sumOfRepresentations(reprA, reprB);
     outputRepr(a + b, sum);
-    int sumR = 0;
+    int sumFromBinToInt = 0;
     for (int i = CAPACITY - 1; i >= 0; --i) {
         if (sum[i]) {
-            sumR += pow(2, CAPACITY - i - 1);
+            sumFromBinToInt += pow(2, CAPACITY - i - 1);
         }
     }
-    cout << sumR << endl;
+    cout << sumFromBinToInt << endl;
 
     delete[] reprB;
     delete[] reprA;
@@ -52,7 +52,8 @@ bool* representation(int number)
     for (int i = 0; i < CAPACITY; ++i) {
         repr[i] = (number & bit);
         bit = bit >> 1;
-        bit = bit & 0x7FFFFFFF;
+	// it`s a magic, WoW
+        bit = bit & 0x7FFFFFFF;	      
     }
     return repr;
 }
