@@ -1,0 +1,10 @@
+4
+3
+0 1 0
+0 1 2
+2 2 3
+2 0 3
+asd ? //*//22 44 //*    8 crt**//
+/*/* qw* yu***/
+str / * la *//* comment in the end of file)
+/*hh*/*gh*/
